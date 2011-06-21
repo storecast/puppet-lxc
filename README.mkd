@@ -1,0 +1,5 @@
+== Puppet Linux Container Management Module ==
+
+Puppet Module to manage Linux container (lxc).
+
+Inspired word from https://github.com/carlasouza/puppet-virt
