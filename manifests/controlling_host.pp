@@ -7,7 +7,7 @@ class puppet-lxc::controlling_host {
 
 	mount {'mount_cgroup' : 
 		name => '/cgroup',
-		atbout => true,
+		atboot => true,
 		device => 'cgroup',
 		ensure => mounted,
 		fstype => 'cgroup',
