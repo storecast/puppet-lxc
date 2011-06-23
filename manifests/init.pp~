@@ -1,12 +1,4 @@
-class virt {
-  case $operatingsystem {
-    debian: { include virt::debian }
-  }
-}
+class lxc {
 
-class virt::debian {
-	package { ["lxc", "lvm2", "reiserfsprogs", "bridge-utils", "debootstrap"]:
-		ensure => latest;
-	}
 }
 
