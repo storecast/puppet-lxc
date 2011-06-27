@@ -5,6 +5,13 @@ class puppet-lxc::controlling_host {
 
 	file { '/cgroup' : ensure => directory; }
 
+	file { '/etc/sysctl.conf' :
+		source => "puppet:///modules/puppet-lxc/etc/sysctl.conf",
+		owner   => root,
+		group   => root,
+		mode    => 444;
+	}
+
 	file {'/usr/local/bin/build_vm':
 		source  => "puppet:///modules/puppet-lxc/usr/local/bin/build_vm",
 		owner   => root,

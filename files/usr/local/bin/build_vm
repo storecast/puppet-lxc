@@ -4,11 +4,12 @@
 # My interactive script they build a lxc vm
 #
 
-echo -n "VM name : "
+echo "Création d'un container LXC "
+echo -n "name : "
 read VM
-echo -n "Virtual Mac addr : "
+echo -n "Mac addr : "
 read MAC
-echo -n "IP failover : "
+echo -n "IP : "
 read IP
 
 mkdir -p /var/lib/lxc/$VM
@@ -46,9 +47,8 @@ iface eth0 inet static
 	post-down route del default gw $GW
 EOF
 
-pwgen
 chroot /var/lib/lxc/$VM/rootfs/ passwd
 debconf-get-selections | grep "^locales" > /var/lib/lxc/$VM/rootfs/tmp/preseed.txt
 chroot /var/lib/lxc/$VM/rootfs/ debconf-set-selections < /tmp/preseed.txt
 chroot /var/lib/lxc/$VM/rootfs/ apt-get install -y locales
-chroot /var/lib/lxc/$VM/rootfs/ apt-get install -y puppet
+chroot /var/lib/lxc/$VM/rootfs/ apt-get install -y --force-yes puppet
