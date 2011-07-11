@@ -36,6 +36,7 @@ GW=$(hostname -i | sed -e 's/\([^.]*$\)/254/g')
 <% else %>
 GW=$(hostname -i)
 <% end %>
+DOMAIN=$(hostname -d)
 cat <<EOF > /var/lib/lxc/$VM/rootfs/etc/network/interfaces
 auto lo
 iface lo inet loopback
@@ -51,8 +52,21 @@ iface eth0 inet static
 	post-down route del default gw $GW
 EOF
 
+cat <<EOF > /var/lib/lxc/$VM/rootfs/etc/hosts
+127.0.0.1       localhost
+127.0.1.1       $VM.$DOMAIN   $VM
+
+# The following lines are desirable for IPv6 capable hosts
+::1     localhost ip6-localhost ip6-loopback
+fe00::0 ip6-localnet
+ff00::0 ip6-mcastprefix
+ff02::1 ip6-allnodes
+ff04::2 ip6-allrouters
+ff02::3 ip6-allhosts
+EOF
+
 chroot /var/lib/lxc/$VM/rootfs/ passwd
-debconf-get-selections | grep "^locales" > /var/lib/lxc/$VM/rootfs/tmp/preseed.txt
+echo "locales	locales/locales_to_be_generated	multiselect	fr_FR.UTF-8 UTF-8" > /var/lib/lxc/$VM/rootfs/tmp/preseed.txt
 chroot /var/lib/lxc/$VM/rootfs/ debconf-set-selections < /tmp/preseed.txt
 chroot /var/lib/lxc/$VM/rootfs/ apt-get install -y locales
 chroot /var/lib/lxc/$VM/rootfs/ apt-get install -y --force-yes puppet
