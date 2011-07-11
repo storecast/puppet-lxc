@@ -7,13 +7,13 @@ class puppet-lxc::controlling_host {
 
 	file { '/etc/sysctl.conf' :
 		source => "puppet:///modules/puppet-lxc/etc/sysctl.conf",
-		owner   => root,
-		group   => root,
-		mode    => 444;
+		owner  => root,
+		group  => root,
+		mode   => 444;
 	}
 
 	file {'/usr/local/bin/build_vm':
-		source  => "puppet:///modules/puppet-lxc/usr/local/bin/build_vm",
+		content => template("puppet-lxc/build_vm.erb"),
 		owner   => root,
 		group   => root,
 		mode    => 555;

@@ -31,7 +31,11 @@ lxc.network.veth.pair = veth$VM
 lxc.network.hwaddr = $MAC	
 EOF
 
+<% if hebergeur == "ovh" %>
 GW=$(hostname -i | sed -e 's/\([^.]*$\)/254/g')
+<% else %>
+GW=$(hostname -i)
+<% end %>
 cat <<EOF > /var/lib/lxc/$VM/rootfs/etc/network/interfaces
 auto lo
 iface lo inet loopback
