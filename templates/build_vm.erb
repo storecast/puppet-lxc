@@ -67,6 +67,6 @@ EOF
 
 chroot /var/lib/lxc/$VM/rootfs/ passwd
 echo "locales	locales/locales_to_be_generated	multiselect	fr_FR.UTF-8 UTF-8" > /var/lib/lxc/$VM/rootfs/tmp/preseed.txt
-chroot /var/lib/lxc/$VM/rootfs/ debconf-set-selections < /tmp/preseed.txt
-chroot /var/lib/lxc/$VM/rootfs/ apt-get install -y locales
-chroot /var/lib/lxc/$VM/rootfs/ apt-get install -y --force-yes puppet
+chroot /var/lib/lxc/$VM/rootfs/ "debconf-set-selections < /tmp/preseed.txt"
+chroot /var/lib/lxc/$VM/rootfs/ "apt-get install -y locales"
+chroot /var/lib/lxc/$VM/rootfs/ "apt-get install -y --force-yes puppet"
