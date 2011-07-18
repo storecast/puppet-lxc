@@ -32,7 +32,7 @@ class puppet-lxc::controlling_host {
 		subscribe   => File["/etc/default/grub"];
 	}
 
-	moun {'mount_cgroup' : 
+	mount {'mount_cgroup' : 
 		name => '/cgroup',
 		atboot => true,
 		device => 'cgroup',
