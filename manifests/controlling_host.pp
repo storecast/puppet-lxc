@@ -20,7 +20,7 @@ class puppet-lxc::controlling_host {
 	}
 
 	file { "/etc/default/grub" :
-		source => "puppet:///modules/puppet-lxc/etc_default_grub"
+		source => "puppet:///modules/puppet-lxc/etc_default_grub",
 		owner  => root,
 		group  => root,
 		mode   => 444;
