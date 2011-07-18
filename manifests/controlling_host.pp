@@ -19,7 +19,20 @@ class puppet-lxc::controlling_host {
 		mode    => 555;
 	}
 
-	mount {'mount_cgroup' : 
+	file { "/etc/default/grub" :
+		source => "puppet:///modules/puppet-lxc/etc_default_grub"
+		owner  => root,
+		group  => root,
+		mode   => 444;
+	}
+
+	exec{"/usr/sbin/update-grub":
+		command     => "/usr/sbin/update-grub",
+		refreshonly => true,
+		subscribe   => File["/etc/default/grub"]
+	}
+
+	moun {'mount_cgroup' : 
 		name => '/cgroup',
 		atboot => true,
 		device => 'cgroup',
