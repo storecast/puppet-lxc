@@ -29,7 +29,7 @@ class puppet-lxc::controlling_host {
 	exec{"/usr/sbin/update-grub":
 		command     => "/usr/sbin/update-grub",
 		refreshonly => true,
-		subscribe   => File["/etc/default/grub"]
+		subscribe   => File["/etc/default/grub"];
 	}
 
 	moun {'mount_cgroup' : 
