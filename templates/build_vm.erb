@@ -29,6 +29,8 @@ lxc.network.name = eth0
 lxc.network.ipv4 = $IP
 lxc.network.veth.pair = veth$VM
 lxc.network.hwaddr = $MAC	
+# memory
+lxc.cgroup.memory.limit_in_bytes = 512M
 EOF
 
 <% if hebergeur == "ovh" %>
@@ -66,7 +68,8 @@ ff02::3 ip6-allhosts
 EOF
 
 chroot /var/lib/lxc/$VM/rootfs/ passwd
-echo "locales	locales/locales_to_be_generated	multiselect	fr_FR.UTF-8 UTF-8" > /var/lib/lxc/$VM/rootfs/tmp/preseed.txt
-chroot /var/lib/lxc/$VM/rootfs/ "debconf-set-selections < /tmp/preseed.txt"
-chroot /var/lib/lxc/$VM/rootfs/ "apt-get install -y locales"
-chroot /var/lib/lxc/$VM/rootfs/ "apt-get install -y --force-yes puppet"
+cp /etc/locale.gen /var/lib/lxc/$VM/rootfs/etc/locale.gen
+chroot /var/lib/lxc/$VM/rootfs/ apt-get install -y locales
+chroot /var/lib/lxc/$VM/rootfs/ apt-get install -y --force-yes puppet
+lxc-start -n $VM -d
+
