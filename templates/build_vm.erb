@@ -71,5 +71,6 @@ chroot /var/lib/lxc/$VM/rootfs/ passwd
 cp /etc/locale.gen /var/lib/lxc/$VM/rootfs/etc/locale.gen
 chroot /var/lib/lxc/$VM/rootfs/ apt-get install -y locales
 chroot /var/lib/lxc/$VM/rootfs/ apt-get install -y --force-yes puppet
+chroot /var/lib/lxc/$VM/rootfs/ apt-get install -y --force-yes lsb-release
 lxc-start -n $VM -d
 
