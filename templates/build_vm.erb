@@ -20,6 +20,33 @@ mount -a
 /usr/lib/lxc/templates/lxc-debian -p /var/lib/lxc/$VM
 
 cat <<EOF >> /var/lib/lxc/$VM/config
+# /var/lib/lxc/$VM/config
+#
+lxc.tty = 4
+lxc.pts = 1024
+lxc.rootfs = /var/lib/lxc/$VM/rootfs
+lxc.cgroup.devices.deny = a
+# /dev/null and zero
+lxc.cgroup.devices.allow = c 1:3 rwm
+lxc.cgroup.devices.allow = c 1:5 rwm
+# consoles
+lxc.cgroup.devices.allow = c 5:1 rwm
+lxc.cgroup.devices.allow = c 5:0 rwm
+lxc.cgroup.devices.allow = c 4:0 rwm
+lxc.cgroup.devices.allow = c 4:1 rwm
+# /dev/{,u}random
+lxc.cgroup.devices.allow = c 1:9 rwm
+lxc.cgroup.devices.allow = c 1:8 rwm
+lxc.cgroup.devices.allow = c 136:* rwm
+lxc.cgroup.devices.allow = c 5:2 rwm
+# rtc
+lxc.cgroup.devices.allow = c 254:0 rwm
+
+# mounts point
+lxc.mount.entry=proc /var/lib/lxc/$VM/rootfs/proc proc nodev,noexec,nosuid 0 0
+lxc.mount.entry=devpts /var/lib/lxc/$VM/rootfs/dev/pts devpts defaults 0 0
+lxc.mount.entry=sysfs /var/lib/lxc/$VM/rootfs/sys sysfs defaults  0 0
+
 # Config réseau
 lxc.utsname = $VM
 lxc.network.type = veth
@@ -73,5 +100,6 @@ chroot /var/lib/lxc/$VM/rootfs/ passwd
 cp /etc/locale.gen /var/lib/lxc/$VM/rootfs/etc/locale.gen
 chroot /var/lib/lxc/$VM/rootfs/ apt-get install -y locales
 chroot /var/lib/lxc/$VM/rootfs/ apt-get install -y --force-yes puppet
+chroot /var/lib/lxc/$VM/rootfs/ apt-get install -y --force-yes lsb-release
 lxc-start -n $VM -d
 
