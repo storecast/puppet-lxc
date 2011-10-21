@@ -33,6 +33,8 @@ lxc.network.hwaddr = $MAC
 lxc.cgroup.memory.limit_in_bytes = 512M
 EOF
 
+ln -s /var/lib/lxc/$VM/config /etc/lxc/auto/$VM
+
 <% if hebergeur == "ovh" %>
 GW=$(hostname -i | sed -e 's/\([^.]*$\)/254/g')
 <% else %>
