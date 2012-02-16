@@ -12,56 +12,24 @@ read MAC
 echo -n "IP : "
 read IP
 
-mkdir -p /var/lib/lxc/$VM
-lvcreate -L 4G -n $VM vg00
-mkreiserfs /dev/vg00/$VM
+# sortie d'urgence avec ou sans message
+out () {
+  DATE=$(date +%Y%m%d-%H%M%S)
+  [ -n "${1:-}" ] && EXIT="${1}" || EXIT=0
+  [ -n "${2:-}" ] && echo "$DATE : $2" >&2
+  exit $EXIT
+}
+
+mkdir -p /var/lib/lxc/$VM || out 1 "impossible de créer /var/lib/lxc/$VM"
+lvcreate -L 4G -n $VM vg00 || out 2 "impossible de créer le lv $VM"
+mkreiserfs /dev/vg00/$VM || out 3 "impossible de formater en reiserfs"
 echo "/dev/mapper/vg00-$VM   /var/lib/lxc/$VM       reiserfs        defaults        0       2" >> /etc/fstab
 mount -a
 /usr/lib/lxc/templates/lxc-debian -p /var/lib/lxc/$VM
 
-cat <<EOF >> /var/lib/lxc/$VM/config
-# /var/lib/lxc/$VM/config
-#
-lxc.tty = 4
-lxc.pts = 1024
-lxc.rootfs = /var/lib/lxc/$VM/rootfs
-lxc.cgroup.devices.deny = a
-# /dev/null and zero
-lxc.cgroup.devices.allow = c 1:3 rwm
-lxc.cgroup.devices.allow = c 1:5 rwm
-# consoles
-lxc.cgroup.devices.allow = c 5:1 rwm
-lxc.cgroup.devices.allow = c 5:0 rwm
-lxc.cgroup.devices.allow = c 4:0 rwm
-lxc.cgroup.devices.allow = c 4:1 rwm
-# /dev/{,u}random
-lxc.cgroup.devices.allow = c 1:9 rwm
-lxc.cgroup.devices.allow = c 1:8 rwm
-lxc.cgroup.devices.allow = c 136:* rwm
-lxc.cgroup.devices.allow = c 5:2 rwm
-# rtc
-lxc.cgroup.devices.allow = c 254:0 rwm
-
-# mounts point
-lxc.mount.entry=proc /var/lib/lxc/$VM/rootfs/proc proc nodev,noexec,nosuid 0 0
-lxc.mount.entry=devpts /var/lib/lxc/$VM/rootfs/dev/pts devpts defaults 0 0
-lxc.mount.entry=sysfs /var/lib/lxc/$VM/rootfs/sys sysfs defaults  0 0
-
-# Config réseau
-lxc.utsname = $VM
-lxc.network.type = veth
-lxc.network.flags = up
-lxc.network.link = br0
-lxc.network.name = eth0
-lxc.network.ipv4 = $IP
-lxc.network.veth.pair = veth$VM
-lxc.network.hwaddr = $MAC	
-# memory
-lxc.cgroup.memory.limit_in_bytes = 512M
-EOF
-
 ln -s /var/lib/lxc/$VM/config /etc/lxc/auto/$VM
 
+# Calcul de la gateway par défaut
 <% if hebergeur == "ovh" %>
 GW=$(hostname -i | sed -e 's/\([^.]*$\)/254/g')
 <% else %>
@@ -96,7 +64,7 @@ ff04::2 ip6-allrouters
 ff02::3 ip6-allhosts
 EOF
 
-chroot /var/lib/lxc/$VM/rootfs/ passwd
+#chroot /var/lib/lxc/$VM/rootfs/ passwd 
 cp /etc/locale.gen /var/lib/lxc/$VM/rootfs/etc/locale.gen
 chroot /var/lib/lxc/$VM/rootfs/ apt-get install -y locales
 chroot /var/lib/lxc/$VM/rootfs/ apt-get install -y --force-yes puppet
