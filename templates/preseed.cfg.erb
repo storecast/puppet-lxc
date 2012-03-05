@@ -1,0 +1,47 @@
+## LXC
+
+# lxc-debconf
+linux-container linux-container/debconf-frontend select noninteractive
+#linux-container linux-container/debconf-priority select critical
+
+linux-container linux-container/distribution string <%= distrib %>
+linux-container linux-container/architecture select
+linux-container linux-container/packages string puppet lsb-release linux-container
+
+linux-container linux-container/mirror string http://ftp.fr.debian.org/debian/
+linux-container linux-container/mirror-security string http://ftp.fr.debian.org/debian-security/
+linux-container linux-container/mirror-backports string http://ftp.fr.debian.org/debian-backports/
+
+linux-container linux-container/archives multiselect 
+linux-container linux-container/archive-areas multiselect main 
+
+linux-container linux-container/auto boolean true
+linux-container linux-container/capabilities string mac_admin mac_override sys_admin sys_module
+linux-container linux-container/late-command string
+
+# linux-container
+linux-container linux-container/enable boolean true
+linux-container linux-container/consoles string 6
+linux-container linux-container/hostname string vm17
+
+linux-container linux-container/eth0/comment string The primary network interface
+linux-container linux-container/eth0/dhcp boolean false
+linux-container linux-container/eth0/mac string <%= mac %>
+linux-container linux-container/eth0/address string <%= ip %>
+linux-container linux-container/eth0/broadcast string <%= ip %>
+linux-container linux-container/eth0/bridge string br0
+
+# TODO: bad hack to rebuild openssh host key
+linux-container linux-container/late-command string apt-get install --reinstall openssh-server
+
+## System
+
+# tzdata
+tzdata tzdata/Areas select Europe
+tzdata tzdata/Zones/Etc select UTC
+tzdata tzdata/Zones/Europe select Paris
+
+# root password
+user-setup passwd/root-password string <%= passwd %>
+user-setup passwd/root-password-again string <%= passwd %>
+

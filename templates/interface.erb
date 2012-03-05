@@ -1,0 +1,25 @@
+<%
+if hebergeur == "ovh"
+  digit = ipaddress.split('.')
+  digit[3] = '254'
+  gw = digit.join('.')
+else 
+  gw = ipaddress
+end
+%>
+#
+# File managed by puppet directly on hyperviser
+# 
+
+auto lo
+iface lo inet loopback
+
+auto eth0
+iface eth0 inet static
+	address <%= ip %>
+	netmask 255.255.255.255
+	broadcast <%= ip %>
+	post-up route add <%= gw %> dev eth0
+	post-up route add default gw <%= gw %>
+	post-down route del <%= gw %> dev eth0
+	post-down route del default gw <%= gw %>
