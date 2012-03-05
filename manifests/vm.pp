@@ -10,8 +10,8 @@ class puppet-lxc::vm ( $ip, $mac, $passwd, $distrib ) {
       owner     => "root",
       group     => "root",
       mode      => 0644,
-      require   => Exec ["create ${name} container"]
-      subscribe => Exec ["create ${name} container"]
+      require   => Exec ["create ${name} container"],
+      subscribe => Exec ["create ${name} container"],
       content   => template("puppet-lxc/interface.erb");
   }
 
