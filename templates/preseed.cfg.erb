@@ -6,7 +6,7 @@ linux-container linux-container/debconf-frontend select noninteractive
 
 linux-container linux-container/distribution string <%= distrib %>
 linux-container linux-container/architecture select
-linux-container linux-container/packages string puppet lsb-release linux-container
+linux-container linux-container/packages string 
 
 linux-container linux-container/mirror string http://ftp.fr.debian.org/debian/
 linux-container linux-container/mirror-security string http://ftp.fr.debian.org/debian-security/
@@ -30,6 +30,9 @@ linux-container linux-container/eth0/mac string <%= mac %>
 linux-container linux-container/eth0/address string <%= ip %>
 linux-container linux-container/eth0/broadcast string <%= ip %>
 linux-container linux-container/eth0/bridge string br0
+
+# additional packages
+linux-container linux-container/packages string puppet lsb-release linux-container
 
 # TODO: bad hack to rebuild openssh host key
 linux-container linux-container/late-command string apt-get install --reinstall openssh-server
