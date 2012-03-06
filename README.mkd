@@ -2,4 +2,3 @@
 
 Puppet Module to manage Linux container (lxc).
 
-Inspired from https://github.com/carlasouza/puppet-virt
