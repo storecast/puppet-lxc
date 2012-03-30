@@ -1,20 +1,11 @@
-<%
-if provider == "ovh"
-  digit = ipaddress.split('.')
-  digit[3] = '254'
-  gw = digit.join('.')
-else 
-  gw = ipaddress
-end
-%>
-#
-# File managed by puppet directly on hyperviser
-# 
-
+##### PUPPET MANAGED ######
 auto lo
 iface lo inet loopback
 
 auto eth0
+<% if ip == "dhcp" -%>
+iface eth0 inet dhcp
+<% else -%>
 iface eth0 inet static
 	address <%= ip %>
 	netmask <%= netmask %>
@@ -23,3 +14,4 @@ iface eth0 inet static
 	post-up route add default gw <%= gw %>
 	post-down route del <%= gw %> dev eth0
 	post-down route del default gw <%= gw %>
+<% end -%>

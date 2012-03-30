@@ -4,7 +4,7 @@
 # My interactive script they build a lxc vm
 #
 
-echo "Création d'un container LXC "
+echo "Creating LXC Container "
 echo -n "name : "
 read VM
 echo -n "Mac addr : "
@@ -20,11 +20,11 @@ out () {
   exit $EXIT
 }
 
-mkdir -p /var/lib/lxc/$VM || out 1 "impossible de créer /var/lib/lxc/$VM"
-lvcreate -L 4G -n $VM vg00 || out 2 "impossible de créer le lv $VM"
-mkreiserfs /dev/vg00/$VM || out 3 "impossible de formater en reiserfs"
-echo "/dev/mapper/vg00-$VM   /var/lib/lxc/$VM       reiserfs        defaults        0       2" >> /etc/fstab
-mount -a
+mkdir -p /var/lib/lxc/$VM || out 1 "Could not create: /var/lib/lxc/$VM"
+#lvcreate -L 4G -n $VM vg00 || out 2 "impossible de créer le lv $VM"
+#mkreiserfs /dev/vg00/$VM || out 3 "impossible de formater en reiserfs"
+#echo "/dev/mapper/vg00-$VM   /var/lib/lxc/$VM       reiserfs        defaults        0       2" >> /etc/fstab
+#mount -a
 /usr/lib/lxc/templates/lxc-debian -p /var/lib/lxc/$VM -n $VM
 
 ln -s /var/lib/lxc/$VM/config /etc/lxc/auto/$VM
@@ -41,14 +41,14 @@ auto lo
 iface lo inet loopback
 
 auto eth0
-iface eth0 inet static
-	address $IP
-	netmask 255.255.255.255
-	broadcast $IP
-	post-up route add $GW dev eth0
-	post-up route add default gw $GW
-	post-down route del $GW dev eth0
-	post-down route del default gw $GW
+iface eth0 inet dhcp
+	#address $IP
+	#netmask 255.255.255.255
+	#broadcast $IP
+	#post-up route add $GW dev eth0
+	#post-up route add default gw $GW
+	#post-down route del $GW dev eth0
+	#post-down route del default gw $GW
 EOF
 
 cat <<EOF > /var/lib/lxc/$VM/rootfs/etc/hosts
@@ -63,6 +63,9 @@ ff02::1 ip6-allnodes
 ff04::2 ip6-allrouters
 ff02::3 ip6-allhosts
 EOF
+
+# setting hostname
+echo $VM |cut -f 1 -d . >/var/lib/lxc/$VM/etc/hostname
 
 #chroot /var/lib/lxc/$VM/rootfs/ passwd 
 cp /etc/locale.gen /var/lib/lxc/$VM/rootfs/etc/locale.gen
