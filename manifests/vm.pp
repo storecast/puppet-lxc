@@ -1,5 +1,5 @@
 # defined container from host 
-define puppet-lxc::vm ( $ip, $mac, $passwd, $distrib ) {
+define lxc::vm ( $ip, $mac, $passwd, $distrib ) {
   file {
     "/var/lib/lxc/${name}/preseed.cfg" :
       owner   => "root",

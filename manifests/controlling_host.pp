@@ -1,14 +1,17 @@
-class puppet-lxc::controlling_host {
-	package { ["lxc", "lvm2", "reiserfsprogs", "bridge-utils", "debootstrap"]:
-		ensure => latest;
+class lxc::controlling_host ($ensure="present") {
+	package { ["lxc", "lvm2", "bridge-utils", "debootstrap"]:
+		ensure => $ensure;
 	}
 
-	file { '/cgroup' : ensure => directory; }
-
-	file { '/etc/sysctl.conf' :
-		source => "puppet:///modules/puppet-lxc/etc/sysctl.conf",
+	File{
+		ensure => $ensure,
 		owner  => root,
 		group  => root,
+	}
+	file { '/cgroup' : ensure => directory; }
+
+	file { '/etc/sysctl.d/ipv4_forward.conf' :
+		source => "puppet:///modules/puppet-lxc/etc/sysctl.conf",
 		mode   => 444;
 	}
 

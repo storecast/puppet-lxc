@@ -1,4 +1,4 @@
-class puppet-lxc {
+class lxc {
 
 }
 
