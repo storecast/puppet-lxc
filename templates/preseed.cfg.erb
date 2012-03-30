@@ -7,9 +7,9 @@ linux-container linux-container/debconf-frontend select noninteractive
 linux-container linux-container/distribution string <%= distrib %>
 linux-container linux-container/architecture select
 
-linux-container linux-container/mirror string http://ftp.fr.debian.org/debian/
-linux-container linux-container/mirror-security string http://ftp.fr.debian.org/debian-security/
-linux-container linux-container/mirror-backports string http://ftp.fr.debian.org/debian-backports/
+linux-container linux-container/mirror string http://ftp.de.debian.org/debian/
+linux-container linux-container/mirror-security string http://ftp.de.debian.org/debian-security/
+linux-container linux-container/mirror-backports string http://ftp.de.debian.org/debian-backports/
 
 linux-container linux-container/archives multiselect 
 linux-container linux-container/archive-areas multiselect main 
@@ -21,13 +21,13 @@ linux-container linux-container/late-command string
 # linux-container
 linux-container linux-container/enable boolean true
 linux-container linux-container/consoles string 6
-linux-container linux-container/hostname string vm17
+linux-container linux-container/hostname string <%= name %>
 
 linux-container linux-container/eth0/comment string The primary network interface
-linux-container linux-container/eth0/dhcp boolean false
-linux-container linux-container/eth0/mac string <%= mac %>
-linux-container linux-container/eth0/address string <%= ip %>
-linux-container linux-container/eth0/broadcast string <%= ip %>
+linux-container linux-container/eth0/dhcp boolean true
+#linux-container linux-container/eth0/mac string <%= mac %>
+#linux-container linux-container/eth0/address string <%= ip %>
+#linux-container linux-container/eth0/broadcast string <%= ip %>
 linux-container linux-container/eth0/bridge string br0
 
 # additional packages
@@ -41,7 +41,7 @@ linux-container linux-container/late-command string apt-get install --reinstall 
 # tzdata
 tzdata tzdata/Areas select Europe
 tzdata tzdata/Zones/Etc select UTC
-tzdata tzdata/Zones/Europe select Paris
+tzdata tzdata/Zones/Europe select Berlin
 
 # root password
 user-setup passwd/root-password string <%= passwd %>

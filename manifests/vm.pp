@@ -33,7 +33,8 @@ define lxc::vm ($ip = "dhcp",
 		exec {
 			"create ${name} container" :
 				command =>
-				"${lxc::mdir}/templates/lxc-debian --preseed-file=/var/lib/lxc/${name}/preseed.cfg -p /var/lib/lxc/${name} -n ${name}",
+				#"${lxc::mdir}/templates/lxc-debian --preseed-file=/var/lib/lxc/${name}/preseed.cfg -p /var/lib/lxc/${name} -n ${name}",
+				"${lxc::mdir}/templates/lxc-debian -p /var/lib/lxc/${name} -n ${name}",
 				require => File["/var/lib/lxc/${name}/preseed.cfg"],
 				refreshonly => false,
 				creates => "/var/lib/lxc/${name}/config"

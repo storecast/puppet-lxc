@@ -90,7 +90,7 @@ ifupdown,\
 locales,\
 libui-dialog-perl,\
 dialog,\
-dhcp-client,\
+isc-dhcp-client,\
 netbase,\
 net-tools,\
 iproute,\
@@ -110,7 +110,7 @@ openssh-server
     echo "Downloading debian minimal ..."
     debootstrap --verbose --variant=minbase --arch=$arch \
 	--include $packages \
-	squeeze $cache/partial-$arch http://ftp.debian.org/debian
+	squeeze $cache/partial-$arch http://ftp.de.debian.org/debian
     if [ $? -ne 0 ]; then
 	echo "Failed to download the rootfs, aborting."
 	return 1
