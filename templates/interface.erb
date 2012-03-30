@@ -1,5 +1,5 @@
 <%
-if hebergeur == "ovh"
+if provider == "ovh"
   digit = ipaddress.split('.')
   digit[3] = '254'
   gw = digit.join('.')
@@ -17,7 +17,7 @@ iface lo inet loopback
 auto eth0
 iface eth0 inet static
 	address <%= ip %>
-	netmask 255.255.255.255
+	netmask <%= netmask %>
 	broadcast <%= ip %>
 	post-up route add <%= gw %> dev eth0
 	post-up route add default gw <%= gw %>

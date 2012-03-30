@@ -1,8 +1,9 @@
 # defined container from host 
-define lxc::vm ($ip,
+define lxc::vm ($ip="dhcp",
 	$mac,
-	$passwd,
-	$distrib,
+	$netmask="255.255.255.0",
+	$passwd="foobar",
+	$distrib="squeeze",
 	$ensure = "present") {
 	File {
 		ensure => $ensure,
@@ -12,7 +13,7 @@ define lxc::vm ($ip,
 			owner => "root",
 			group => "root",
 			mode => 0644,
-			content => template("puppet-lxc/preseed.cfg.erb") ;
+			content => template("lxc/preseed.cfg.erb") ;
 
 		"/var/lib/lxc/${name}/rootfs/etc/network/interfaces" :
 			owner => "root",
@@ -20,7 +21,7 @@ define lxc::vm ($ip,
 			mode => 0644,
 			require => Exec["create ${name} container"],
 			subscribe => Exec["create ${name} container"],
-			content => template("puppet-lxc/interface.erb") ;
+			content => template("lxc/interface.erb") ;
 	}
 	if $ensure == "present" {
 		exec {

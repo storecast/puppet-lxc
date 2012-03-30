@@ -30,7 +30,7 @@ mount -a
 ln -s /var/lib/lxc/$VM/config /etc/lxc/auto/$VM
 
 # Calcul de la gateway par défaut
-<% if hebergeur == "ovh" %>
+<% if provider == "ovh" %>
 GW=$(hostname -i | sed -e 's/\([^.]*$\)/254/g')
 <% else %>
 GW=$(hostname -i)
