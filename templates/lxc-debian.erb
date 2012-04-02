@@ -39,7 +39,7 @@ l6:6:wait:/etc/init.d/rc 6
 # Normally not reached, but fallthrough in case of emergency.
 z6:6:respawn:/sbin/sulogin
 1:2345:respawn:/sbin/getty 38400 console
-c1:12345:respawn:/sbin/getty 38400 tty1 linux
+#c1:12345:respawn:/sbin/getty 38400 tty1 linux
 #c2:12345:respawn:/sbin/getty 38400 tty2 linux
 #c3:12345:respawn:/sbin/getty 38400 tty3 linux
 #c4:12345:respawn:/sbin/getty 38400 tty4 linux
@@ -75,10 +75,6 @@ EOF
     chroot $rootfs /usr/sbin/update-rc.d -f umountfs remove
     chroot $rootfs /usr/sbin/update-rc.d -f hwclock.sh remove
     chroot $rootfs /usr/sbin/update-rc.d -f hwclockfirst.sh remove
-
-    echo "root:root" | chroot $rootfs chpasswd
-    echo "Root password is 'root', please change !"
-
     return 0
 }
 
@@ -86,6 +82,7 @@ download_debian()
 {
     packages=\
 ifupdown,\
+iputils-ping,
 locales,\
 libui-dialog-perl,\
 dialog,\
@@ -93,7 +90,10 @@ isc-dhcp-client,\
 netbase,\
 net-tools,\
 iproute,\
-openssh-server
+openssh-server,
+facter,
+bind9-host,
+vim
 
     cache=$1
     arch=$2
