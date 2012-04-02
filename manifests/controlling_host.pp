@@ -1,6 +1,7 @@
 class lxc::controlling_host ($ensure = "present",
-	$provider = "") inherits lxc {
-	
+	$provider = "",
+	$bridge) inherits lxc {
+
 	package {
 		["lxc", "lvm2", "bridge-utils", "debootstrap"] :
 			ensure => $ensure ;
@@ -11,7 +12,7 @@ class lxc::controlling_host ($ensure = "present",
 		group => root,
 	}
 	file {
-		['/cgroup',"$mdir"] :
+		['/cgroup',"$mdir","$mdir/templates"] :
 			ensure => directory ;
 
 		'/etc/sysctl.d/ipv4_forward.conf' :
@@ -26,10 +27,10 @@ class lxc::controlling_host ($ensure = "present",
 			source => "puppet:///modules/lxc/etc_default_grub",
 			mode => 444 ;
 
-		"${mdir}/templates" :
+		"${mdir}/templates/lxc-debian" :
 			recurse => true,
-			source => "puppet:///modules/lxc/lxc_templates",
-			require => File[$mdir] ;
+			content => template("lxc/lxc-debian.erb"),
+			require => File["$mdir/templates"] ;
 	}
 	exec {
 		"/usr/sbin/update-grub" :
