@@ -199,6 +199,7 @@ lxc.mount.entry=devpts $rootfs/dev/pts devpts defaults 0 0
 lxc.mount.entry=sysfs $rootfs/sys sysfs defaults  0 0
 lxc.mount.entry=/etc/hosts $rootfs/etc/hosts none,ro bind 0 0
 lxc.mount.entry=/etc/apt $rootfs/etc/apt none,ro bind 0 0
+lxc.mount.entry=/etc/puppet $rootfs/etc/puppet none,ro bind 0 0
 
 ## Network
 lxc.network.type                        = veth
