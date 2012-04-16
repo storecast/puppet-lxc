@@ -1,0 +1,12 @@
+#### PUPPET MANAGED ####
+# Comment out to run the lxc init script
+RUN=yes
+
+# Directory containing the container configurations
+CONF_DIR=/etc/lxc
+
+# Start /etc/lxc/example.conf, /etc/lxc/autostart.conf, etc.
+#CONTAINERS="example autostart container"
+
+LXC_SHUTDOWN="stop"
+LXC_DIRECTORY="/var/lib/lxc"
