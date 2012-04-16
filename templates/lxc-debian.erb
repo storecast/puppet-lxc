@@ -46,7 +46,7 @@ z6:6:respawn:/sbin/sulogin
 EOF
 
     # disable selinux in debian
-    mkdir -p $rootfs/selinux
+    mkdir -p $rootfs/selinux $rootfs/etc/puppet
     echo 0 > $rootfs/selinux/enforce
 
     # configure the network using the dhcp
@@ -80,7 +80,7 @@ EOF
 
 download_debian()
 {
-    packages="libui-dialog-perl,dialog,ifupdown,iputils-ping,locales,isc-dhcp-client,netbase,net-tools,iproute,openssh-server,facter,puppet,bind9-host,vim,sudo"
+    packages="libui-dialog-perl,dialog,ifupdown,iputils-ping,locales,isc-dhcp-client,netbase,net-tools,iproute,openssh-server,bind9-host,vim,sudo"
 
     cache=$1
     arch=$2

@@ -11,6 +11,10 @@ class lxc::controlling_host ($ensure = "present",
 		owner => root,
 		group => root,
 	}
+	file{"/etc/default/lxc":
+		source => "puppet:///modules/lxc/etc_default_lxc",
+	}
+		
 	file {
 		['/cgroup',"$mdir","$mdir/templates"] :
 			ensure => directory ;
