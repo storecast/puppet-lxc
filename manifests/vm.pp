@@ -1,20 +1,27 @@
 # defined container from host
 define lxc::vm ($ip = "dhcp",
-	$mac,
+	$mac = '',
+	$gw = '',
 	$netmask = "255.255.255.0",
 	$passwd,
-	$distrib = "squeeze",
+	$distrib = "${lsbdistcodename}",
 	$container_root = "/var/lib/lxc",
 	$ensure = "present",
 	$mainuser = '',
 	$mainuser_sshkey = '',
 	$autorun = true,
 	$autostart = true) {
-	require 'lxc::controlling_host' File {
+	require 'lxc::controlling_host' 
+	
+	File {
 		ensure => $ensure,
 	}
 	$c_path = "${container_root}/${name}"
 	$h_name = $name
+	$mac_r = $mac ? {
+	 '' => lxc_genmac($h_name),
+	 default => $mac
+	}
 	file {
 		"${c_path}" :
 			ensure => $ensure ? {
@@ -38,9 +45,9 @@ define lxc::vm ($ip = "dhcp",
 	}
 	if defined(Class["dnsmasq"]) {
 		dnsmasq::dhcp-host {
-			"${h_name}-${mac}" :
+			"${h_name}-${mac_r}" :
 				hostname => $name,
-				mac => $mac,
+				mac => $mac_r,
 		}
 	}
 	if $ensure == "present" {
@@ -62,10 +69,10 @@ define lxc::vm ($ip = "dhcp",
 			require => Exec["create ${h_name} container"],
 		}
 		line {
-			"mac: ${mac}" :
-				line => "lxc.network.hwaddr = ${mac}" ;
+			"mac: ${mac_r}" :
+				line => "lxc.network.hwaddr = ${mac_r}" ;
 
-			"bridge: {${mac}:${lxc::controlling_host::bridge}" :
+			"bridge: {${mac_r}:${lxc::controlling_host::bridge}" :
 				line => "lxc.network.link = ${lxc::controlling_host::bridge}" ;
 
 			"send host-name \"${h_name}\";" :
