@@ -42,9 +42,13 @@ class lxc::controlling_host ($ensure = "present",
 			refreshonly => true,
 			subscribe => File["/etc/default/grub"] ;
 	}
+	$mtpt = $lsbdistcodename ? {
+		"oneiric" => "/sys/fs/cgroup",
+		default => "/cgroup",
+	}
 	mount {
 		'mount_cgroup' :
-			name => '/cgroup',
+			name => $mtpt,
 			atboot => true,
 			device => 'cgroup',
 			ensure => mounted,
