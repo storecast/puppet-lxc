@@ -101,7 +101,10 @@ download_debian()
 	echo "Failed to download the rootfs, aborting."
 	return 1
     fi
-
+	# adding one console device
+	mknod -m 660 $cache/partial-$arch/dev/tty1 c 5 1
+	chown root:tty $cache/partial-$arch/dev/tty1
+	
     mv "$1/partial-$arch" "$1/rootfs-$arch"
     echo "Download complete."
 
