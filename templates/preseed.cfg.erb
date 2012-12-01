@@ -31,7 +31,7 @@ linux-container linux-container/eth0/dhcp boolean true
 linux-container linux-container/eth0/bridge string br0
 
 # additional packages
-linux-container linux-container/packages string puppet lsb-release 
+linux-container linux-container/packages string puppet lsb-release cron
 
 # TODO: bad hack to rebuild openssh host key
 linux-container linux-container/late-command string apt-get install --reinstall openssh-server
