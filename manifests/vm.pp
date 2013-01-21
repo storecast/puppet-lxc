@@ -38,7 +38,6 @@ define lxc::vm (
   }
 
   if $ip != "static" {
-    notice("${hostname} IP is: ${ip}")
     file { "${c_path}/rootfs/etc/network/interfaces":
       owner     => "root",
       group     => "root",
@@ -59,9 +58,7 @@ define lxc::vm (
   if $ensure == "present" {
     exec { "create ${h_name} container":
       command     =>
-      # "${lxc::mdir}/templates/lxc-debian --preseed-file=/var/lib/lxc/${h_name}/preseed.cfg -p
-      # /var/lib/lxc/${h_name} -n ${h_name}",
-      "/bin/bash ${lxc::mdir}/templates/lxc-debian -p ${c_path} -n ${h_name}",
+      "/bin/bash ${lxc::mdir}/templates/lxc-debian -p ${c_path} -n ${h_name} -d ${distrib}",
       require     => File["${c_path}/preseed.cfg"],
       refreshonly => false,
       creates     => "${c_path}/config",
