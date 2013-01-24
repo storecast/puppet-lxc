@@ -28,7 +28,7 @@ linux-container linux-container/eth0/dhcp boolean true
 #linux-container linux-container/eth0/mac string <%= mac %>
 #linux-container linux-container/eth0/address string <%= ip %>
 #linux-container linux-container/eth0/broadcast string <%= ip %>
-linux-container linux-container/eth0/bridge string br0
+linux-container linux-container/eth0/bridge string <%= bridge %>
 
 # additional packages
 linux-container linux-container/packages string puppet lsb-release cron

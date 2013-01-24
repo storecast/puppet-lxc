@@ -11,6 +11,7 @@ define lxc::vm (
   $mainuser        = '',
   $mainuser_sshkey = '',
   $autorun         = true,
+  $bridge          = "${lxc::controlling_host::bridge}",
   $autostart       = true) {
   require 'lxc::controlling_host'
 
@@ -57,8 +58,7 @@ define lxc::vm (
 
   if $ensure == "present" {
     exec { "create ${h_name} container":
-      command     =>
-      "/bin/bash ${lxc::mdir}/templates/lxc-debian -p ${c_path} -n ${h_name} -d ${distrib}",
+      command     => "/bin/bash ${lxc::mdir}/templates/lxc-debian -p ${c_path} -n ${h_name} -d ${distrib}",
       require     => File["${c_path}/preseed.cfg"],
       refreshonly => false,
       creates     => "${c_path}/config",
@@ -78,7 +78,7 @@ define lxc::vm (
         line => "lxc.network.hwaddr = ${mac_r}";
 
       "bridge: {${mac_r}:${lxc::controlling_host::bridge}":
-        line => "lxc.network.link = ${lxc::controlling_host::bridge}";
+        line => "lxc.network.link = ${bridge}";
 
       "send host-name \"${h_name}\";":
         file => "${c_path}/rootfs/etc/dhcp/dhclient.conf";
@@ -142,6 +142,7 @@ define lxc::vm (
       }
     }
   } # end ensure=present
+
 
 
   file { "/etc/lxc/auto/${h_name}.conf":
