@@ -12,6 +12,7 @@ define lxc::vm (
   $mainuser_sshkey = '',
   $autorun         = true,
   $bridge          = "${lxc::controlling_host::bridge}",
+  $addpackages     = '',
   $autostart       = true) {
   require 'lxc::controlling_host'
 
@@ -55,10 +56,12 @@ define lxc::vm (
       mac      => $mac_r,
     }
   }
-
+  if $addpackages != '' {
+    $addpkg = "-a ${addpackages}"
+  }
   if $ensure == "present" {
     exec { "create ${h_name} container":
-      command     => "/bin/bash ${lxc::mdir}/templates/lxc-debian -p ${c_path} -n ${h_name} -d ${distrib}",
+      command     => "/bin/bash ${lxc::mdir}/templates/lxc-debian -p ${c_path} -n ${h_name} -d ${distrib} ${addpkg}",
       require     => File["${c_path}/preseed.cfg"],
       refreshonly => false,
       creates     => "${c_path}/config",
