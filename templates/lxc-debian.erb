@@ -85,6 +85,10 @@ download_debian()
     cache=$1
     arch=$2
     dist=$3
+    addpkg=$4
+    if [ -n $addpkg ]; then
+       packages="${packages},${addpkg}"
+    fi
 
     # check the mini debian was not already downloaded
     mkdir -p "$cache/partial-$arch"
@@ -270,6 +274,7 @@ do
 		-n|--name)      name=$2; shift 2;;
 		-c|--clean)     clean=$2; shift 2;;
 		-d|--dist)      dist=$2; shift 2;;
+		-a|--addpkg)    addpkg=$2; shift 2;;
         --)             shift 1; break ;;
         *)              break ;;
     esac
