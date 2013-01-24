@@ -39,7 +39,7 @@ define lxc::vm (
       content => template("lxc/preseed.cfg.erb");
   }
 
-  if $ip != "static" {
+  if $ip != "manual" {
     file { "${c_path}/rootfs/etc/network/interfaces":
       owner     => "root",
       group     => "root",
