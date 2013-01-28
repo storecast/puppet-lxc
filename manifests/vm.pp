@@ -56,9 +56,11 @@ define lxc::vm (
       mac      => $mac_r,
     }
   }
+
   if $addpackages != '' {
     $addpkg = "-a ${addpackages}"
   }
+
   if $ensure == "present" {
     exec { "create ${h_name} container":
       command     => "/bin/bash ${lxc::mdir}/templates/lxc-debian -p ${c_path} -n ${h_name} -d ${distrib} ${addpkg}",
@@ -82,6 +84,9 @@ define lxc::vm (
 
       "bridge: {${mac_r}:${lxc::controlling_host::bridge}":
         line => "lxc.network.link = ${bridge}";
+
+      "pair: {${mac_r}:${h_name}":
+        line => "lxc.network.veth.pair = veth_${h_name}";
 
       "send host-name \"${h_name}\";":
         file => "${c_path}/rootfs/etc/dhcp/dhclient.conf";
